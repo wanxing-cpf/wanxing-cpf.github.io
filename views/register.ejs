@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>注册 - 文件管理系统</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body { background-color: #f8f9fa; }
+    .register-container { max-width: 500px; margin: 50px auto; }
+    .card { box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15); }
+    .form-text { font-size: 0.85rem; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="register-container">
+      <div class="card">
+        <div class="card-header bg-primary text-white text-center py-3">
+          <h3 class="mb-0">用户注册</h3>
+        </div>
+        <div class="card-body p-4">
+          <% if (error) { %>
+            <div class="alert alert-danger alert-dismissible fade show">
+              <%= error %>
+              <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+          <% } %>
+          
+          <form action="/register" method="POST">
+            <div class="mb-3">
+              <label for="username" class="form-label">用户名</label>
+              <input type="text" class="form-control" id="username" name="username"
+                     pattern="[a-zA-Z0-9]{3,20}" required autofocus>
+              <div class="form-text">3-20 位英文字母或数字</div>
+            </div>
+            <div class="mb-3">
+              <label for="password" class="form-label">密码</label>
+              <input type="password" class="form-control" id="password" name="password" required>
+              <div class="form-text">至少 6 位字符</div>
+            </div>
+            <div class="mb-3">
+              <label for="confirmPassword" class="form-label">确认密码</label>
+              <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required>
+            </div>
+            <div class="mb-3">
+              <div class="alert alert-info">
+                <small>注册后您将获得 <strong><%= (2).toLocaleString() %>GB</strong> 存储空间</small>
+              </div>
+            </div>
+            <button type="submit" class="btn btn-primary w-100 py-2">注册</button>
+          </form>
+        </div>
+        <div class="card-footer bg-light text-center py-3">
+          <small>已有账号？<a href="/login">立即登录</a></small>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // 客户端验证：密码长度、两次密码是否一致、用户名格式
+    document.querySelector('form').addEventListener('submit', (e) => {
+      const username = document.getElementById('username').value.trim();
+      const password = document.getElementById('password').value;
+      const confirmPassword = document.getElementById('confirmPassword').value;
+      const usernameRegex = /^[a-zA-Z0-9]{3,20}$/;
+
+      if (!usernameRegex.test(username)) {
+        alert('用户名必须为 3~20 位英文字母或数字');
+        e.preventDefault();
+      } else if (password.length < 6) {
+        alert('密码至少需要 6 位');
+        e.preventDefault();
+      } else if (password !== confirmPassword) {
+        alert('两次密码输入不一致');
+        e.preventDefault();
+      }
+    });
+  </script>
+</body>
+</html>
